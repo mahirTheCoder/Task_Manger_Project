@@ -5,9 +5,13 @@ const dbConfig = require('./configs/dbConfig');
 const dotenv = require('dotenv');
 app.use(express.json());
 app.use(router)
-
 dotenv.config();
 dbConfig()
+
+// -----server crash ba dbconfig connect na hole ai code ta use korle problem solve hoey jabe 
+
+// const dns = require('dns');
+// dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 
 
