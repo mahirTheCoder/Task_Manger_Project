@@ -1,9 +1,13 @@
 const express = require('express')
 const app = express()
-const router = require('./router')
+const router = require('./router');
+const dbConfig = require('./configs/dbConfig');
+const dotenv = require('dotenv');
 app.use(express.json());
 app.use(router)
 
+dotenv.config();
+dbConfig()
 
 
 
