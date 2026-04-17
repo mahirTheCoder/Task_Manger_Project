@@ -26,13 +26,6 @@ const authSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  emailVerificationToken: {
-    type: String,
-    default: null,
-  },
-  emailVerificationExpiry: {
-    type: Date,
-  },
   otp: {
     type: String,
     default: null,
@@ -40,10 +33,7 @@ const authSchema = new mongoose.Schema({
   otpExpiry: {
     type: Date,
   },
-  otpSecret: {
-    type: String,
-    default: null,
-  },
+
 
 });
 
