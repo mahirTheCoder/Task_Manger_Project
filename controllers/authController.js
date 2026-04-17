@@ -1,5 +1,5 @@
-// const User = require("../models/authSchema");
-
+ 
+const authSchema = require("../models/authSchema");
 const { isvalidEmail } = require("../helpers/utils");
 
 // const bcrypt = require("bcryptjs");
@@ -13,6 +13,18 @@ const register = async (req, res) => {
     if(!email) return res.status(400).send({ message: "Email is required" });
     if(!isvalidEmail(email)) return res.status(400).send({ message: "Invalid email format" });
     if(!password) return res.status(400).send({ message: "Password is required" });
+
+
+
+    // ---------existing email 
+ const existingUser = await authSchema.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+
+
+
 
 
     // // 3. Password strength check
