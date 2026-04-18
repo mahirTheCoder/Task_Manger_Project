@@ -1,5 +1,5 @@
 const authSchema = require("../models/authSchema");
-const { isvalidEmail } = require("../helpers/utils");
+const { isvalidEmail, generateOTP } = require("../helpers/utils");
 
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -22,12 +22,17 @@ const register = async (req, res) => {
       return res.status(400).send({ message: "Email already exists" });
     }
  
+
+    // ----------generate otp 
+      const otp = generateOTP ();
+    
     
     // ------send server data to database
     const user = await authSchema({
       fullName,
       email,
       password,
+      otp: otp,
     });
 
     await user.save();
