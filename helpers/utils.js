@@ -6,11 +6,8 @@ const isvalidEmail = (email) => {
   return emailRegex.test(email);
 }
 
-const generateOTP  =()=>{
+const generateOTP = () => {
   return crypto.randomInt(100000, 1000000).toString();
-  const otp = generateOTP();
-
-
 }
 
 module.exports = { isvalidEmail , generateOTP };

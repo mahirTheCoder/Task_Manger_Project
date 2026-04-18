@@ -12,11 +12,10 @@ const transporter = nodemailer.createTransport({
 });
 
 
-
 const mailSender = async ({ email, subject, otp }) => {
   try {
     await transporter.sendMail({
-      from: `"Task Manager Team" <team@taskmanager.com>`,
+      from: `"Task Manager Team" <mahirthecoder.bd@gmail.com>`,
       to: email,
       subject: subject,
       html: otpEmailTemplates(otp),

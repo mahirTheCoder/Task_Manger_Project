@@ -35,36 +35,18 @@ const authSchema = new mongoose.Schema({
   },
 });
 
-// authSchema.pre("save", async function () {
-//   if (!this.isModified("password")) return;
-//   try {
-//     const saltRounds = 10;
-//     const salt = await bcrypt.genSalt(saltRounds);
-//     this.password = await bcrypt.hash(this.password, salt);
-//   } catch (err) {
-//     throw err;
-//   }
-// });
 
-// // Instance method to compare password
-// authSchema.methods.comparePassword = async function (candidatePassword) {
-//   try {
-//     return await bcrypt.compare(candidatePassword, this.password);
-//   } catch (err) {
-//     throw err;
-//   }
-// };
 
 // Pre-save middleware (password hash)
 authSchema.pre("save", async function () {
-  // jodi password change na hoy, tahole hash korbe na
+  // Skip hashing if password hasn't been modified
   if (!this.isModified("password")) return;
 
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
   } catch (error) {
-    next(error);
+    throw error;
   }
 });
 
@@ -73,4 +55,4 @@ authSchema.pre("save", async function () {
 //   return await bcrypt.compare(enteredPassword, this.password);
 // };
 
-module.exports = mongoose.model("auth", authSchema);
+module.exports = mongoose.model("TaskManager", authSchema);

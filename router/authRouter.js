@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const authControler = require('../controllers/authController')
+// FIX: Corrected typo from 'authControler' to 'authController'
+const authController = require('../controllers/authController')
 
-router.post('/register', authControler.register)
+router.post('/register', authController.register)
 
 
 
