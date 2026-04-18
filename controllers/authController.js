@@ -1,12 +1,10 @@
 const authSchema = require("../models/authSchema");
 const { isvalidEmail, generateOTP } = require("../helpers/utils");
-
+const mailSender = require("../helpers/mailService").mailSender;
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;
 
   try {
-
-
     // ---- Basic validation
     if (!fullName.trim())
       return res.status(400).send({ message: "Full name is required" });
@@ -21,23 +19,28 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).send({ message: "Email already exists" });
     }
- 
 
-    // ----------generate otp 
-      const otp = generateOTP ();
-    
-    
+    // ----------generate otp
+    const otp = generateOTP();
+
     // ------send server data to database
     const user = await authSchema({
       fullName,
       email,
       password,
       otp: otp,
+      otpExpiry: Date.now() + 5 * 60 * 1000, // OTP valid for 5 minutes
     });
 
     await user.save();
 
+    // ------------nodemailer mail send
 
+    await mailSender({
+      email,
+      subject: " OTP verification mail",
+      otp: otp,
+    });
 
     //  Success response
     res.status(201).send({
