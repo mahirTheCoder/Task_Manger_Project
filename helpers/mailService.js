@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { otpEmailTemplates } = require("./emailTemplates");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -10,14 +11,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+
 const mailSender = async ({ email, subject, otp }) => {
   try {
     await transporter.sendMail({
-      from: `"Task Manager Team" <${process.env.SMTP_USER}>`,
+      from: `"Task Manager Team" <team@taskmanager.com>`,
       to: email,
       subject: subject,
-      text: `Your OTP is ${otp}`,
-      html: `<h2>Your OTP: ${otp}</h2>`,
+      html: otpEmailTemplates(otp),
     });
   } catch (err) {
     console.error("Error while sending mail:", err);
