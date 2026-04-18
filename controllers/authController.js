@@ -56,4 +56,31 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { register };
+const verifyOTP = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    const user = await authSchema.findOneAndUpdate({ email , otp, otpExpiry: { $gt: Date.now() } },{ isVerified: true },{ new: true });
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).send({ message: "Invalid OTP" });
+    }
+
+    if (Date.now() > user.otpExpiry) {
+      return res.status(400).send({ message: "OTP has expired" });
+    }
+
+    // user.otp = null;
+    // user.otpExpiry = null;
+    await user.save(); 
+
+    res.status(200).send({ message: "OTP verified successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+
+module.exports = { register, verifyOTP };
