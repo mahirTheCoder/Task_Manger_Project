@@ -50,9 +50,9 @@ authSchema.pre("save", async function () {
   }
 });
 
-// // Password compare method (login er jonno)
-// authSchema.methods.comparePassword = async function (enteredPassword) {
-//   return await bcrypt.compare(enteredPassword, this.password);
-// };
+// Password compare method (login er jonno)
+authSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.model("TaskManager", authSchema);

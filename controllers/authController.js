@@ -1,6 +1,9 @@
 const authSchema = require("../models/authSchema");
 const { isvalidEmail, generateOTP } = require("../helpers/utils");
 const mailSender = require("../helpers/mailService").mailSender;
+
+
+
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;
 
@@ -56,11 +59,18 @@ const register = async (req, res) => {
   }
 };
 
+
+
+// -------- OTP verification controller
 const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
 
   try {
-    const user = await authSchema.findOneAndUpdate({ email , otp, otpExpiry: { $gt: Date.now() } },{ isVerified: true },{ new: true });
+    const user = await authSchema.findOneAndUpdate(
+      { email, otp, otpExpiry: { $gt: Date.now() } },
+      { isVerified: true },
+      { new: true },
+    );
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
@@ -73,9 +83,9 @@ const verifyOTP = async (req, res) => {
       return res.status(400).send({ message: "OTP has expired" });
     }
 
-    // user.otp = null;
+    user.otp = null;
     // user.otpExpiry = null;
-    await user.save(); 
+    await user.save();
 
     res.status(200).send({ message: "OTP verified successfully" });
   } catch (error) {
@@ -83,4 +93,25 @@ const verifyOTP = async (req, res) => {
   }
 };
 
-module.exports = { register, verifyOTP };
+
+
+// ------------login
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await authSchema.findOne({ email });
+
+    if (!user) return res.status(404).send({ message: "User not found" });
+    if (!user.isVerified)
+      return res
+        .status(401)
+        .send({ message: "Please verify your email first" });
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch)
+      return res.status(400).send({ message: "Invalid credentials" });
+    res.status(200).send({ message: "Login successful" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+module.exports = { register, verifyOTP, login };
