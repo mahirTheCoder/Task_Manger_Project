@@ -1,9 +1,7 @@
 const authSchema = require("../models/authSchema");
-const { isvalidEmail, generateOTP } = require("../helpers/utils");
+const { isvalidEmail, generateOTP, generateAccessToken } = require("../helpers/utils");
 const mailSender = require("../helpers/mailService").mailSender;
-
-
-
+const jwt = require("jsonwebtoken");
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;
 
@@ -59,8 +57,6 @@ const register = async (req, res) => {
   }
 };
 
-
-
 // -------- OTP verification controller
 const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
@@ -93,8 +89,6 @@ const verifyOTP = async (req, res) => {
   }
 };
 
-
-
 // ------------login
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -109,9 +103,22 @@ const login = async (req, res) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch)
       return res.status(400).send({ message: "Invalid credentials" });
+
+    // ----------access token generation
+       const accessToken = generateAccessToken({
+      id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+       })
+
+    res.cookie("accessToken", accessToken )
+
     res.status(200).send({ message: "Login successful" });
   } catch (error) {
-    res.status(500).send({ message: "Internal server error" });
-  }
+  console.error("LOGIN ERROR:", error); 
+  res.status(500).send({
+    message: "Internal server error",
+    error: error.message,
+  });  }
 };
 module.exports = { register, verifyOTP, login };

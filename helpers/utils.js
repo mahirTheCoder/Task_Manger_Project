@@ -1,13 +1,19 @@
-const crypto = require('crypto');
-
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const isvalidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-}
+};
 
 const generateOTP = () => {
-  return crypto.randomInt(100000, 1000000).toString();
-}
+  // --------- Generate a random 4-digit OTP
+  return crypto.randomInt(1000, 10000).toString();
+};
 
-module.exports = { isvalidEmail , generateOTP };
+const generateAccessToken = (user) => {
+  const token = jwt.sign(user, process.env.JWT_SEC);
+  return token;
+};
+
+module.exports = { isvalidEmail, generateOTP, generateAccessToken };

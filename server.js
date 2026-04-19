@@ -3,8 +3,12 @@ const app = express()
 const router = require('./router');
 const dbConfig = require('./configs/dbConfig');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser')
+
 app.use(express.json());
 app.use(router)
+app.use(cookieParser())
+
 dotenv.config();
 dbConfig();
 
