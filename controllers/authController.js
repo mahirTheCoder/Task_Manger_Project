@@ -105,13 +105,26 @@ const login = async (req, res) => {
       return res.status(400).send({ message: "Invalid credentials" });
 
     // ----------access token generation
-       const accessToken = generateAccessToken({
-      id: user._id,
+    //    const accessToken = generateAccessToken({
+    //   id: user._id,
+    //   fullName: user.fullName,
+    //   email: user.email,
+    //    })
+
+    // res.cookie("accessToken", accessToken )
+
+    const accessToken = generateAccessToken({
+      _id: user._id,
       fullName: user.fullName,
       email: user.email,
-       })
+    });
 
-    res.cookie("accessToken", accessToken )
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true, // XSS protection
+      secure: false,  // production এ true দিবা (https হলে)
+      sameSite: "strict",
+    });
+
 
     res.status(200).send({ message: "Login successful" });
   } catch (error) {
@@ -121,4 +134,16 @@ const login = async (req, res) => {
     error: error.message,
   });  }
 };
+
+
+
+// // -------userProfile
+// const userProfile = async (req, res) => {
+//   console.log(req.cookies);
+
+//   res.status(200).send({ message: "User profile data" });
+  
+// }
+
+
 module.exports = { register, verifyOTP, login };
