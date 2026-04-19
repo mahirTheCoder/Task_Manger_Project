@@ -1,16 +1,18 @@
-const express = require('express')
-const app = express()
+
+const express = require('express');
+const app = express();
+
 const router = require('./router');
 const dbConfig = require('./configs/dbConfig');
 const dotenv = require('dotenv');
-const cookieParser = require('cookie-parser')
-
-app.use(express.json());
-app.use(router)
-app.use(cookieParser())
-
+const cookieParser = require('cookie-parser');
 dotenv.config();
 dbConfig();
+app.use(express.json());
+app.use(cookieParser())
+
+app.use(router)
+
 
 // const dns = require('dns');
 // dns.setServers(['8.8.8.8', '8.8.4.4']);

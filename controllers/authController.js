@@ -119,12 +119,9 @@ const login = async (req, res) => {
       email: user.email,
     });
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true, // XSS protection
-      secure: false,  // production এ true দিবা (https হলে)
-      sameSite: "strict",
-    });
+    res.cookie("accessToken", accessToken);
 
+    // console.log(accessToken);
 
     res.status(200).send({ message: "Login successful" });
   } catch (error) {
@@ -137,13 +134,20 @@ const login = async (req, res) => {
 
 
 
-// // -------userProfile
-// const userProfile = async (req, res) => {
-//   console.log(req.cookies);
-
-//   res.status(200).send({ message: "User profile data" });
+// -------userProfile
+const userProfile = async (req, res) => {
+  try {
+    const user = await authSchema.findOne({ _id: req.user._id }).select('avatar fullName email');
+ if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    } else {
+      res.status(200).send({ user });
+    } 
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
   
-// }
+}
 
 
-module.exports = { register, verifyOTP, login };
+module.exports = { register, verifyOTP, login, userProfile};

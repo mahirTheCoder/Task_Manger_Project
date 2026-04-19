@@ -19,7 +19,7 @@ const generateOTP = () => {
 // utils/token.js
 
 
-// 🔐 Access Token Generate
+//  Access Token Generate
 const generateAccessToken = (user) => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is missing");
