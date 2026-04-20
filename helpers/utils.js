@@ -11,31 +11,15 @@ const generateOTP = () => {
   return crypto.randomInt(1000, 10000).toString();
 };
 
-// const generateAccessToken = (user) => {
-//   const token = jwt.sign(user, process.env.JWT_SEC);
-//   return token;
-// };
-
-// utils/token.js
 
 
 //  Access Token Generate
-const generateAccessToken = (user) => {
-  if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is missing");
-  }
 
-  return jwt.sign(
-    {
-      _id: user._id,
-      email: user.email,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "1d", 
-    }
-  );
+const generateAccessToken = (user) => {
+  const token = jwt.sign(user, process.env.JWT_SEC);
+  return token;
 };
+
 
 // // 🔍 Verify Token (future use)
 // const verifyAccessToken = (token) => {
