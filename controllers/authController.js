@@ -6,6 +6,7 @@ const {
 } = require("../helpers/utils");
 const mailSender = require("../helpers/mailService").mailSender;
 const jwt = require("jsonwebtoken");
+
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;
 
@@ -84,7 +85,7 @@ const verifyOTP = async (req, res) => {
     }
 
     user.otp = null;
-    // user.otpExpiry = null;
+    user.otpExpiry = null;
     await user.save();
 
     res.status(200).send({ message: "OTP verified successfully" });
@@ -108,15 +109,7 @@ const login = async (req, res) => {
     if (!isMatch)
       return res.status(400).send({ message: "Invalid credentials" });
 
-    // ----------access token generation
-    //    const accessToken = generateAccessToken({
-    //   id: user._id,
-    //   fullName: user.fullName,
-    //   email: user.email,
-    //    })
-
-    // res.cookie("accessToken", accessToken )
-
+    // -----------generate access token
     const accessToken = generateAccessToken({
       _id: user._id,
       fullName: user.fullName,
@@ -124,41 +117,7 @@ const login = async (req, res) => {
     });
 
     res.cookie("accessToken", accessToken);
-
-
-    // -------userProfile
-    // const userProfile = async (req, res) => {
-    //   try {
-    //     const user = await authSchema.findOne({ _id: req.user._id }).select('avatar fullName email');
-    //  if (!user) {
-    //       return res.status(404).send({ message: "User not found" });
-    //     } else {
-    //       res.status(200).send({ user });
-    //     }
-    //   } catch (error) {
-    //     res.status(500).send({ message: "Internal server error" });
-    //   }
-
-    // }
-
-    // ----------update profile
-
-    // const updateProfile = async (req, res) => {
-    //   const { fullName, avatar } = req.body;
-    //   try {
-    //     const user = await authSchema.findByIdAndUpdate(
-    //       req.user._id,
-    //       { fullName, avatar },
-    //       { new: true }
-    //     );
-    //     if (!user) {
-    //       return res.status(404).send({ message: "User not found" });
-    //     }
-    //     res.status(200).send({ message: "Profile updated successfully", user });
-    //   } catch (error) {
-    //     res.status(500).send({ message: "Internal server error" });
-    //   }
-    // };
+    console.log(accessToken);
 
     res.status(200).send({ message: "Login successful" });
   } catch (error) {
@@ -170,4 +129,43 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, verifyOTP, login };
+// const userProfile = async (req, res) => {
+//   try {
+//     const user = await authSchema.findOne({ _id: req.user._id }).select('avatar fullName email');
+//  if (!user) {
+//       return res.status(404).send({ message: "User not found" });
+//     } else {
+//       res.status(200).send({ user });
+//     }
+//   } catch (error) {
+//     res.status(500).send({ message: "Internal server error" });
+//   }
+
+// }
+
+const userProfile = async (req, res) => {
+  console.log(req.cookies)
+
+  res.status(200).send({ message: "User profile accessed successfully" });
+};
+
+// ----------update profile
+
+// const updateProfile = async (req, res) => {
+//   const { fullName, avatar } = req.body;
+//   try {
+//     const user = await authSchema.findByIdAndUpdate(
+//       req.user._id,
+//       { fullName, avatar },
+//       { new: true }
+//     );
+//     if (!user) {
+//       return res.status(404).send({ message: "User not found" });
+//     }
+//     res.status(200).send({ message: "Profile updated successfully", user });
+//   } catch (error) {
+//     res.status(500).send({ message: "Internal server error" });
+//   }
+// };
+
+module.exports = { register, verifyOTP, login, userProfile };
