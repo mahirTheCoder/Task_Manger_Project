@@ -144,28 +144,24 @@ const login = async (req, res) => {
 // }
 
 const userProfile = async (req, res) => {
-  console.log(req.cookies)
-
-  res.status(200).send({ message: "User profile accessed successfully" });
+  const { fullName, avatar } = req.body;
+  try {
+    const user = await authSchema.findByIdAndUpdate(
+      req.user._id,
+      { fullName, avatar },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    res.status(200).send({ message: "Profile updated successfully", user });
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+  console.log(user)
 };
 
 // ----------update profile
 
-// const updateProfile = async (req, res) => {
-//   const { fullName, avatar } = req.body;
-//   try {
-//     const user = await authSchema.findByIdAndUpdate(
-//       req.user._id,
-//       { fullName, avatar },
-//       { new: true }
-//     );
-//     if (!user) {
-//       return res.status(404).send({ message: "User not found" });
-//     }
-//     res.status(200).send({ message: "Profile updated successfully", user });
-//   } catch (error) {
-//     res.status(500).send({ message: "Internal server error" });
-//   }
-// };
 
 module.exports = { register, verifyOTP, login, userProfile };
