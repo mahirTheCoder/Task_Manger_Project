@@ -1,4 +1,5 @@
 const authSchema = require("../models/authSchema");
+
 const {
   isvalidEmail,
   generateOTP,
@@ -117,7 +118,7 @@ const login = async (req, res) => {
     });
 
     res.cookie("accessToken", accessToken);
-    console.log(accessToken);
+    // console.log(accessToken);
 
     res.status(200).send({ message: "Login successful" });
   } catch (error) {
@@ -138,7 +139,6 @@ const userProfile = async (req, res) => {
     const user = await authSchema
       .findOne({ _id: req.user._id })
       .select("avatar fullName email");
-      console.log(user);
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     } else {
@@ -149,23 +149,22 @@ const userProfile = async (req, res) => {
   }
 };
 
-// const userProfile = async (req, res) => {
-//   try {
-//     const user = await authSchema.findByIdAndUpdate(
-//       req.user._id,
-//       { fullName, avatar },
-//       { new: true }
-//     );
-//     if (!user) {
-//       return res.status(404).send({ message: "User not found" });
-//     }
-//     res.status(200).send({ message: "Profile updated successfully", user });
-//   } catch (error) {
-//     res.status(500).send({ message: "Internal server error" });
-//   }
-//   console.log(user)
-// };
 
-// ----------update profile
 
-module.exports = { register, verifyOTP, login, userProfile };
+// ------------update profile 
+
+const updateProfile = async (req, res) => {
+  const { fullName, avatar } = req.body;
+  const userId = req.user._id;
+  try {
+    console.log(avatar)
+    
+    res.status(200).send({ message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error" });
+  }
+}
+
+
+
+module.exports = { register, verifyOTP, login, userProfile, updateProfile  };
