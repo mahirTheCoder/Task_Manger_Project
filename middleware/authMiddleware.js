@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const authMiddleware = (req, res, next) => {
   try {
-      console.log("COOKIES:", req.cookies); 
     const { accessToken } = req.cookies;
     const decoded = jwt.verify(accessToken, process.env.JWT_SEC);
     if (decoded) {
@@ -10,7 +9,6 @@ const authMiddleware = (req, res, next) => {
     } else {
         res.status(401).send({ message: "Unauthorized request" })
     }
-    console.log( decoded);
   } catch (error) {
     console.log("AUTH ERROR:", error);
   }
