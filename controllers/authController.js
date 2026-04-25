@@ -7,6 +7,8 @@ const {
 } = require("../helpers/utils");
 const mailSender = require("../helpers/mailService").mailSender;
 const jwt = require("jsonwebtoken");
+const cloudinary = require('cloudinary').v2
+ 
 
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;

@@ -1,6 +1,8 @@
 const express = require("express");
 const multer  = require('multer')
 const upload = multer()
+// -------secound way to upload file
+// const { upload } = require("../helpers/multerService");
 
 const router = express.Router();
 const {register , verifyOTP, login,userProfile , updateProfile} = require("../controllers/authController");
