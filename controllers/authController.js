@@ -157,7 +157,7 @@ const updateProfile = async (req, res) => {
   const { fullName, avatar } = req.body;
   const userId = req.user._id;
   try {
-    console.log(avatar)
+    console.log(req.file); // debug
     
     res.status(200).send({ message: "Profile updated successfully" });
   } catch (error) {
