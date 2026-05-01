@@ -13,7 +13,7 @@ router.post("/register", register);
 router.post("/verifyOTP", verifyOTP);
 router.post("/login", login);
 router.get("/profile", authMiddleware, userProfile); 
-router.put("/updateProfile", authMiddleware, upload.single('avatar'),  updateProfile);
+router.put("/updateProfile", authMiddleware, upload.single('avatar'), updateProfile);
 
 
 module.exports = router;
