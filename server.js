@@ -13,8 +13,8 @@ app.use(cookieParser());
 app.use(router);
 
 // ------secound way to serve static files
-// const path = require('path');
-// console.log(path.join(__dirname, 'uploads')); // debug
+const path = require('path');
+console.log(path.join(__dirname, 'uploads')); // debug
 
 
 app.listen(8000, () => {
