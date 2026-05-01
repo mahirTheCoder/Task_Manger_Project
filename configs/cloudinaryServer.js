@@ -7,3 +7,5 @@ cloudinary.config({
 });
 
 //   process.env.CLOUDINARY_API_KEY,
+
+module.exports = cloudinary;

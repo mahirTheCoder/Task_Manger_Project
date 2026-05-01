@@ -7,9 +7,8 @@ const {
 } = require("../helpers/utils");
 const mailSender = require("../helpers/mailService").mailSender;
 const jwt = require("jsonwebtoken");
-// const cloudinary = require('cloudinary').v2
-const cloloudinary = require ('../configs/cloudinaryServer') 
-
+const { upload } = require("../helpers/multerService");
+const cloudinary = require("../configs/cloudinaryServer");
 const register = async (req, res) => {
   const { fullName, email, password } = req.body;
 
@@ -151,22 +150,24 @@ const userProfile = async (req, res) => {
   }
 };
 
-
-
-// ------------update profile 
+// ------------update profile
 
 const updateProfile = async (req, res) => {
   const { fullName, avatar } = req.body;
   const userId = req.user._id;
   try {
-
     console.log(req.file);
+    cloudinary.uploader.upload(req.file.path,(error, result) => {
+        console.log(result, error);
+      },
+    );
+
     res.status(200).send({ message: "Profile updated successfully" });
   } catch (error) {
     res.status(500).send({ message: "Internal server error" });
   }
-}
+};
 
 
 
-module.exports = { register, verifyOTP, login, userProfile, updateProfile  };
+module.exports = { register, verifyOTP, login, userProfile, updateProfile };
