@@ -157,17 +157,14 @@ const updateProfile = async (req, res) => {
   const userId = req.user._id;
   try {
     console.log(req.file);
-    cloudinary.uploader.upload(req.file.path,(error, result) => {
-        console.log(result, error);
-      },
-    );
+    cloudinary.uploader.upload(req.file.path, (error, result) => {
+      console.log(result, error);
+    });
 
     res.status(200).send({ message: "Profile updated successfully" });
   } catch (error) {
     res.status(500).send({ message: "Internal server error" });
   }
 };
-
-
 
 module.exports = { register, verifyOTP, login, userProfile, updateProfile };
